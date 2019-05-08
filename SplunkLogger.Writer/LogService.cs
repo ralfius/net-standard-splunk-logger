@@ -20,12 +20,14 @@ namespace SplunkLogger.Writer
                 .CreateLogger();
         }
 
+        //TODO consider it as non-blocking async operation
         public void WriteInformation(string message)
         {
             var userId = Guid.NewGuid();
             var accountId = Guid.NewGuid();
             var correlationId = Guid.NewGuid();
 
+            //TODO send logs to another place if splunk is not available
             _logger.Information("{message} {userId} {accountId} {correlationId}", message, userId, accountId, correlationId);
         }
 
