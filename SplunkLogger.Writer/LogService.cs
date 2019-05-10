@@ -13,10 +13,11 @@ namespace SplunkLogger.Writer
         {
             //TODO test with real splunk
             _logger = new LoggerConfiguration()
-                .WriteTo.EventCollector(
+                .WriteTo.Async(a => a.EventCollector(
                     "http://localhost:8088/services/collector",
                     "1cb44352-504b-409d-8e72-815b2a179006",
-                    new CompactSplunkJsonFormatter())
+                    new CompactSplunkJsonFormatter()))
+                .Enrich.WithMachineName()
                 .CreateLogger();
         }
 
@@ -28,7 +29,7 @@ namespace SplunkLogger.Writer
             var correlationId = Guid.NewGuid();
 
             //TODO send logs to another place if splunk is not available
-            _logger.Information("{message} {userId} {accountId} {correlationId}", message, userId, accountId, correlationId);
+            _logger.Information("{Message} {UserId} {AccountId} {CorrelationId}", message, userId, accountId, correlationId);
         }
 
         public void Dispose()
