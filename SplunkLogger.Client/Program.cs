@@ -13,7 +13,7 @@ namespace SplunkLogger.Client
 
             try
             {
-                using (var logService = new LogService())
+                using (var logService = new SerilogLogService())
                 {
                     logService.WriteInformation("JSON message from HMDAWiz SplunkLogger.Client");
                 }

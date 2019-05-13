@@ -5,18 +5,25 @@ using Serilog.Sinks.Splunk;
 
 namespace SplunkLogger.Writer
 {
-    public class LogService : ILogService, IDisposable
+    public class SerilogLogService : ILogService, IDisposable
     {
         private readonly Logger _logger;
 
-        public LogService()
+        public SerilogLogService()
         {
             //TODO test with real splunk
             _logger = new LoggerConfiguration()
-                .WriteTo.Async(a => a.EventCollector(
-                    "http://localhost:8088/services/collector",
+                .AuditTo.Sink(new EventCollectorSink(
+                    "http://localhost:8088/services/collector2",
                     "1cb44352-504b-409d-8e72-815b2a179006",
+                    "path",
+                    1,
+                    1,
                     new CompactSplunkJsonFormatter()))
+                //.WriteTo.Async(a => a.EventCollector(
+                //    "http://localhost:8088/services/collector",
+                //    "1cb44352-504b-409d-8e72-815b2a179006",
+                //    new CompactSplunkJsonFormatter()))
                 .Enrich.WithMachineName()
                 .CreateLogger();
         }
