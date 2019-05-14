@@ -24,7 +24,7 @@ namespace SplunkLogger.Client
                 throw;
             }
 
-            Console.WriteLine("Message is sent without error. Please any key to exit");
+            Console.WriteLine("Message is sent without exception. Press any key to exit");
             Console.Read();
         }
     }

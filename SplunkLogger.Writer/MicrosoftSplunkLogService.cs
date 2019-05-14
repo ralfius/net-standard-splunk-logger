@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Splunk;
+using Newtonsoft.Json;
+using SplunkLogger.Writer.SplunkLogger;
+using SplunkConfiguration = SplunkLogger.Writer.SplunkLogger.SplunkConfiguration;
 
 namespace SplunkLogger.Writer
 {
@@ -17,7 +19,9 @@ namespace SplunkLogger.Writer
                     ServerUrl = new Uri("http://localhost:8087"),
                     Token = "1cb44352-504b-409d-8e72-815b2a179006",
                     RetriesOnError = 0,
-                    MinLevel = LogLevel.Trace
+                    MinLevel = LogLevel.Trace,
+                    OnError = (e) => { Console.WriteLine($"Some error during sending logs to Splunk. Original events: {JsonConvert.SerializeObject(e.Events)}"); },
+                    Formatter = e => new { e.Source, e.Host, CustomProperty = "CustomValue" }
                 }, "MyApplicationName", "MyEnvironmentName");
             _logger = _factory.CreateLogger("Auditing");
         }
